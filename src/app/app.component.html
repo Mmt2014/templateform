@@ -1,28 +1,60 @@
-<div class="container">
+<div class="container" *ngIf="false">
   <div class="row">
-    <div class="col-12">
-      <form (ngSubmit)="onSubmit(form)" #form="ngForm"> <!--local refereence using #variable built in directive-->
-        <div id="user-data">
+    <div class="col-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <form (ngSubmit)="onSubmit()" #form="ngForm"> <!--local refereence using #variable built in directive--> <!--again we take reference by viewchild-->
+        <div id="user-data" ngModelGroup="userData">
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" class="form-control" ngModel name="username">
+            <input type="text" id="username" class="form-control" ngModel name="username" required>
           </div>
-          <button class="btn btn-info mt-2" type="button">Suggest an Username</button>
+          <button class="btn btn-info mt-2" type="button" (click)="onSuggest()">Suggest an Username</button>
           <div class="form-group">
             <label for="email">Mail</label>
-            <input type="email" id="email" class="form-control" ngModel name="email">
+            <input type="email" id="email" class="form-control" ngModel #emailInput = ngModel name="email" required email>
+            <span *ngIf="!emailInput.valid && emailInput.touched" class="error">*Email address should be in the proper format.</span>
           </div>
         </div>
         <div class="form-group">
+          <label for="Address">Address</label>
+          <input type="string" id="email" class="form-control" ngModel #addressInput = ngModel name="address" required>
+
+        </div>
+        
+          <div class=" mt-2" *ngFor="let gender of genders">
+          
+          <input type="radio" class="form-control" ngModel name="gender" value={{gender}} [(ngModel)]="selectedGender">{{gender}}
+        
+          </div>
+        
+        <div class="form-group">
           <label for="secret">Secret Questions</label>
-          <select id="secret" class="form-control" ngModel name="question">
+          <select id="secret" class="form-control" [(ngModel)]="selectedQuestion" ngModel name="question">
             <option value="pet">Your first Pet?</option>
             <option value="teacher">Your first teacher?</option>
             
           </select>
         </div>
-        <button class="btn btn-primary mt-3" type="submit">Submit</button>
+        <button class="btn btn-primary mt-3" type="submit" [disabled]="form.invalid">Submit</button>
+        <button class="btn btn-danger mt-3" type="button" (click)="onReset()">Cancel</button><!--if form is invalid submit button will disabled-->
       </form>
     </div>
   </div>
+  <!-- <div class="row">
+    <div *ngIf="showUserData">
+      <label>Username</label>
+      <span>{{user.username}}</span>
+      <hr>
+      <label>email:</label>
+      <span>{{user.email}}</span>
+      <hr>
+      <label>address:</label>
+      <span>{{user.address}}</span>
+      <hr>
+      <label>question</label>
+      <span>{{user.question}}</span>
+    </div>
+  </div> -->
 </div>
+<!--NgModelGroup is used when we deal with group like contact details-->
+<!--we use ngModelGroup="userGroup"-->
+<app-reactiveform></app-reactiveform>
